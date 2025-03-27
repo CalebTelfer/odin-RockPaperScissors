@@ -2,7 +2,83 @@
     case sensitive lowercase only for now
 */
 
-playGame();
+//playGame();
+
+const displayBox = document.querySelector("#display-box");
+const resultText = document.querySelector("#resultText");
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
+const scoreBoard = document.querySelector("#score");
+
+rockButton.addEventListener("click", function() {playRound("rock", getComputerChoice())});
+paperButton.addEventListener("click", function() {playRound("paper",  getComputerChoice())});
+scissorsButton.addEventListener("click", function() {playRound("scissors", getComputerChoice())});
+
+let humanScore = 0;
+let computerScore = 0;
+
+function playRound(humanChoice, computerChoice) {
+
+    switch (humanChoice) {
+        case "rock":
+            if(computerChoice == "scissors") {
+                displayBox.style.backgroundColor = "green";
+                resultText.textContent = "You win! Rock beats Scissors!";
+                humanScore++;
+                updateScore();
+                checkForWin();
+            } else if(computerChoice == "paper") {
+                displayBox.style.backgroundColor = "red";
+                resultText.textContent = "You Lose! Scissors beats Rock!";
+                computerScore++;
+                updateScore();
+                checkForWin();
+            } else {
+                displayBox.style.backgroundColor = "#202020";
+                resultText.textContent = "Tie! Try again!";
+            }
+            break;
+        
+        case "paper":
+            if(computerChoice == "rock") {
+                displayBox.style.backgroundColor = "green";
+                resultText.textContent = "You win! Paper beats Rock!";
+                humanScore++;
+                updateScore();
+                checkForWin();
+            } else if(computerChoice == "scissors") {
+                displayBox.style.backgroundColor = "red";
+                resultText.textContent = "You Lose! Scissors beats Paper!";
+                computerScore++;
+                updateScore();
+                checkForWin();
+            } else {
+                displayBox.style.backgroundColor = "#202020";
+                resultText.textContent = "Tie! Try again!";
+            }
+            break;
+
+        case "scissors":
+            if(computerChoice == "paper") {
+                displayBox.style.backgroundColor = "green";
+                resultText.textContent = "You win! Scissors beats Paper!";
+                humanScore++;
+                updateScore();
+                checkForWin();
+            } else if(computerChoice == "rock") {
+                displayBox.style.backgroundColor = "red";
+                resultText.textContent = "You Lose! Rock beats Scissors!"
+                computerScore++;
+                updateScore();
+                checkForWin();
+            } else {
+                displayBox.style.backgroundColor = "#202020";
+                resultText.textContent = "Tie! Try again!";
+            }
+            break;
+    }
+}
 
 function getComputerChoice() {
     let choice = Math.floor(Math.random() * 3);
@@ -24,64 +100,29 @@ function getComputerChoice() {
     return computerChoice;
 }
 
-function getHumanChoice() {
-    let humanChoice = prompt("Choose Rock, Paper, or Scissors!");
-    return humanChoice;
+function updateScore() {
+    scoreBoard.textContent = "You " +humanScore+ " - " +computerScore + " Computer";
 }
 
-function playGame() {
-    
-    let humanScore = 0;
-    let computerScore = 0;
+function checkForWin() {
+    if (humanScore == 5) {
+        resultText.textContent = ('You have won! Score = ' +humanScore+ ' - ' +computerScore);
+        displayBox.style.backgroundColor = "pink";
 
-    for(let i = 0; i < 5; i++) {
-        console.log("New round! Score " + humanScore + " - " +computerScore);
-        playRound(getHumanChoice(), getComputerChoice());
-    }
+        //reset game
+        scoreBoard.textContent = "You 0 - 0 Computer";
+        computerScore = 0;
+        humanScore = 0;
+        return;
 
-    if(humanScore > computerScore) {
-        console.log("You won! Score " + humanScore + " - " +computerScore);
-    } else {
-        console.log("You lost! Score " + humanScore + " - " +computerScore);
-    }
+    } else if (computerScore == 5) {
+        displayBox.style.backgroundColor = "pink";
+        resultText.textContent = ('You have lost! Score = ' +humanScore+ ' - ' +computerScore);
 
-    function playRound(humanChoice, computerChoice) {
-        switch (humanChoice) {
-            case "rock":
-                if(computerChoice == "scissors") {
-                    console.log("You win! Rock beats Scissors!");
-                    humanScore++;
-                } else if(computerChoice == "paper") {
-                    console.log("You Lose! Paper beats Rock!");
-                    computerScore++;
-                } else {
-                    console.log("Tie! Try again!");
-                }
-                break;
-            
-            case "paper":
-                if(computerChoice == "rock") {
-                    console.log("You win! Paper beats Rocks!");
-                    humanScore++;
-                } else if(computerChoice == "Scissors") {
-                    console.log("You Lose! Scissors beats Paper!");
-                    computerScore++;
-                } else {
-                    console.log("Tie! Try again!");
-                }
-                break;
-    
-            case "scissors":
-                if(computerChoice == "paper") {
-                    console.log("You win! Scissors beats Paper!");
-                    humanScore++;
-                } else if(computerChoice == "rock") {
-                    console.log("You Lose! Rock beats Scissors!");
-                    computerScore++;
-                } else {
-                    console.log("Tie! Try again!");
-                }
-                break;
-        }
+        //reset game
+        scoreBoard.textContent = "You 0 - 0 Computer";
+        computerScore = 0;
+        humanScore = 0;
+        return;
     }
 }
